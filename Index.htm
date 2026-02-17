@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intención de Voto - Huanuni 2026</title>
+    <style>
+        :root {
+            --azul-oscuro: #002e5f;
+            --azul-claro: #0056b3;
+            --amarillo-bandera: #ffcc00;
+            --amarillo-suave: #fff8d6;
+            --blanco: #ffffff;
+            --gris-fondo: #f0f2f5;
+            --texto: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--gris-fondo);
+            margin: 0;
+            padding: 0;
+            color: var(--texto);
+        }
+
+        /* --- Header Institucional --- */
+        header {
+            background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul-claro) 100%);
+            color: var(--blanco);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 6px solid var(--amarillo-bandera);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.1rem;
+            color: var(--amarillo-bandera);
+            font-weight: bold;
+        }
+
+        /* --- Aviso Legal (Disclaimer) --- */
+        .legal-notice {
+            background-color: var(--amarillo-suave);
+            border-left: 5px solid var(--azul-oscuro);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 900px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .legal-notice h3 {
+            color: var(--azul-oscuro);
+            margin-top: 0;
+        }
+
+        /* --- Contenedor Principal --- */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Secciones de Votación --- */
+        .section-title {
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+            margin-top: 30px;
+            border-bottom: 3px solid var(--amarillo-bandera);
+            text-align: center;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Tarjeta de Candidato --- */
+        .card {
+            background: var(--blanco);
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--amarillo-bandera);
+        }
+
+        /* Estilo para la tarjeta seleccionada */
+        .card.selected {
+            background-color: var(--azul-oscuro);
+            border-color: var(--amarillo-bandera);
+            color: var(--blanco);
+            box-shadow: 0 0 15px rgba(0, 86, 179, 0.4);
+        }
+
+        .card.selected .party-name { color: var(--amarillo-bandera); }
+        .card.selected .candidate-role { color: #ccc; }
+
+        /* Ocultar el radio button nativo */
+        .card input[type="radio"] {
+            display: none;
+        }
+
+        .party-name {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--azul-claro);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .candidate-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .candidate-role {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* --- Botón de Enviar --- */
+        .btn-votar {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 18px;
+            background: linear-gradient(to right, #ffcc00, #ffdb4d);
+            color: var(--azul-oscuro);
+            font-size: 1.3rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+            transition: transform 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-votar:hover {
+            transform: scale(1.02);
+            filter: brightness(105%);
+        }
+
+        /* --- Pantalla de Bloqueo / Agradecimiento --- */
+        #pantalla-bloqueo {
+            display: none; /* Se activa con JS */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--azul-oscuro);
+            color: var(--blanco);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #pantalla-bloqueo h1 {
+            color: var(--amarillo-bandera);
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-bloqueo">
+        <h1>¡Gracias por Participar!</h1>
+        <p style="font-size: 1.5rem;">Su intención de voto ha sido registrada.</p>
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 30px; max-width: 600px;">
+            <p>🔒 <strong>Sistema de Voto Único:</strong> Su dispositivo ya ha registrado una participación.</p>
+            <p>📅 <strong>Resultados:</strong> Se darán a conocer públicamente en un lapso de 5 días para garantizar la transparencia.</p>
+        </div>
+    </div>
+
+    <header>
+        <h1>Municipio de Huanuni</h1>
+        <p>Encuesta de Intención de Voto 2026</p>
+    </header>
+
+    <div class="legal-notice">
+        <h3>⚠️ INFORMACIÓN IMPORTANTE</h3>
+        <ul>
+            <li><strong>Voluntariedad:</strong> Nadie está obligado a participar en esta encuesta digital.</li>
+            <li><strong>Privacidad:</strong> Respetamos absolutamente la privacidad de cada ciudadano; no se almacenan nombres ni datos personales.</li>
+            <li><strong>Transparencia:</strong> Esto es una medición de intención de voto. Los resultados consolidados se publicarán en 5 días.</li>
+        </ul>
+    </div>
+
+    <form id="formVoto" class="container">
+
+        <div class="section-title">
+            <h2>🗳️ Elija 1 Alcalde</h2>
+        </div>
+        <div class="grid-cards" id="grupo-alcaldes">
+            
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="FRI - Jose Wenceslao Mamani" required>
+                <div class="party-name">FRENTE REV. DE IZQUIERDA (FRI)</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">JOSE WENCESLAO MAMANI CHOQUECALLATA</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="JACHA - Lily Rossemary Ardaya">
+                <div class="party-name">JACH'A - JAKISA -  - </div>
+                <div class="candidate-role">Candidata a Alcaldesa</div>
+                <div class="candidate-name">ROSSEMARY ARDAYA CLAURE</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="AYLLU - Jaime Mamani">
+                <div class="party-name">AYLLU JILANKO TAYAQUIRA</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">JAIME MAMANI HUARAYO</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="PP - Americo Luis Calani">
+                <div class="party-name">PARTICIPACIÓN POPULAR (P.P.)</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">AMERICO LUIS CALANI QUISPE</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="A-UPP - Ever Colque">
+                <div class="party-name">ALIANZA UNIDOS POR LOS PUEBLOS</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">EVER COLQUE YUCRA</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="PATRIA - Victor Hugo Loayza">
+                <div class="party-name">ALIANZA PATRIA ORURO</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">VICTOR HUGO LOAYZA CARVAJAL</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
+                <input type="radio" name="voto_alcalde" value="SOMOS - Jose Manuel Crespo">
+                <div class="party-name">SOMOS ORURO</div>
+                <div class="candidate-role">Candidato a Alcalde</div>
+                <div class="candidate-name">JOSE MANUEL CRESPO SIÑANI</div>
+            </label>
+        </div>
+
+        <div class="section-title">
+            <h2>🗳️ Elija 1 Concejal</h2>
+        </div>
+        <div class="grid-cards" id="grupo-concejales">
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="FRI - Mirian Raquel Alvaro" required>
+                <div class="party-name">FRENTE REV. DE IZQUIERDA (FRI)</div>
+                <div class="candidate-role">Primera Concejal</div>
+                <div class="candidate-name">MIRIAN RAQUEL ALVARO LOZA</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="JACHA - Ivan Jose Huanca">
+                <div class="party-name">JACH'A - JAKISA - SOL - FESORC</div>
+                <div class="candidate-role">Primer Concejal</div>
+                <div class="candidate-name">IVAN JOSE HUANCA CHOQUE</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="AYLLU - Cecilio Antonio Alegre">
+                <div class="party-name">AYLLU JILANKO TAYAQUIRA</div>
+                <div class="candidate-role">Primer Concejal</div>
+                <div class="candidate-name">CECILIO ANTONIO ALEGRE</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="PP - Magali Mitma">
+                <div class="party-name">PARTICIPACIÓN POPULAR (P.P.)</div>
+                <div class="candidate-role">Primera Concejal</div>
+                <div class="candidate-name">MAGALI MITMA ESCOBAR</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="A-UPP - Juan De Dios Mamani">
+                <div class="party-name">ALIANZA UNIDOS POR LOS PUEBLOS</div>
+                <div class="candidate-role">Primer Concejal</div>
+                <div class="candidate-name">JUAN DE DIOS MAMANI MITMA</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="PATRIA - Esttefany Aserico">
+                <div class="party-name">ALIANZA PATRIA ORURO</div>
+                <div class="candidate-role">Primera Concejal</div>
+                <div class="candidate-name">ESTTEFANY ASERICO QUISPE</div>
+            </label>
+
+            <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
+                <input type="radio" name="voto_concejal" value="SOMOS - Brenda Antonia Ramirez">
+                <div class="party-name">SOMOS ORURO</div>
+                <div class="candidate-role">Primera Concejal</div>
+                <div class="candidate-name">BRENDA ANTONIA RAMIREZ MAMANI</div>
+            </label>
+        </div>
+
+        <button type="button" class="btn-votar" onclick="enviarVoto()">CONFIRMAR Y ENVIAR VOTO</button>
+        <p style="text-align: center; font-size: 0.8rem; color: #777;">Al hacer clic, usted confirma que su voto es personal y definitivo.</p>
+
+    </form>
+
+<script>
+        // ---------------- CONFIGURACIÓN ----------------
+        // He corregido tu URL agregándole "/exec" al final
+        const scriptURL = "https://script.google.com/macros/s/AKfycbwUspfNKbWaL26fwGtg0sCpUz-HlM9NWH_TxgFbK7qK7kaI8XzEhDRd-jcNfYHHAzj7/exec";
+        const ID_ENCUESTA = "AKfycbwUspfNKbWaL26fwGtg0sCpUz-HlM9NWH_TxgFbK7qK7kaI8XzEhDRd-jcNfYHHAzj7"; 
+        // -----------------------------------------------
+
+        // 1. Verificar si ya votó
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem(ID_ENCUESTA) === 'registrado') {
+                mostrarBloqueo();
+            }
+        });
+
+        // 2. Seleccionar tarjeta (Estilos)
+        function seleccionarTarjeta(card, tipo) {
+            let contenedorID = (tipo === 'alcalde') ? 'grupo-alcaldes' : 'grupo-concejales';
+            let contenedor = document.getElementById(contenedorID);
+            
+            let tarjetas = contenedor.querySelectorAll('.card');
+            tarjetas.forEach(t => t.classList.remove('selected'));
+            
+            let inputs = contenedor.querySelectorAll('input');
+            inputs.forEach(i => i.checked = false);
+
+            card.classList.add('selected');
+            card.querySelector('input').checked = true;
+        }
+
+        // 3. Función de Envío
+        function enviarVoto(){
+            const alcalde = document.querySelector('input[name="voto_alcalde"]:checked');
+            const concejal = document.querySelector('input[name="voto_concejal"]:checked');
+
+            if(!alcalde || !concejal){
+                alert("⚠️ ATENCIÓN: Debe seleccionar:\n\n1. Un candidato a Alcalde\n2. Un candidato a Concejal");
+                return;
+            }
+
+            if(!confirm("¿Está seguro de su elección?")){
+                return;
+            }
+
+            const boton = document.querySelector('.btn-votar');
+            boton.disabled = true;
+            boton.innerText = "Enviando...";
+
+            // Preparar datos para enviar
+            // Usamos un formato compatible con cualquier script de Google estándar
+            const formData = new FormData();
+            formData.append("alcalde", alcalde.value);
+            formData.append("concejal", concejal.value);
+            formData.append("frente", "VOTO_APP"); 
+            formData.append("fecha", new Date().toISOString());
+
+            fetch(scriptURL, {
+                method: "POST",
+                mode: "no-cors", // ESTO ES CRUCIAL PARA EVITAR EL ERROR DE CONEXIÓN
+                body: formData
+            })
+            .then(() => {
+                // Al usar no-cors, asumimos éxito si la red no falla
+                localStorage.setItem(ID_ENCUESTA, 'registrado');
+                mostrarBloqueo();
+            })
+            .catch(error => {
+                alert("Hubo un problema de conexión. Por favor, intente nuevamente.");
+                boton.disabled = false;
+                boton.innerText = "CONFIRMAR Y ENVIAR VOTO";
+                console.error('Error!', error.message);
+            });
+        }
+
+        function mostrarBloqueo() {
+            document.querySelector('header').style.display = 'none';
+            document.querySelector('.legal-notice').style.display = 'none';
+            document.getElementById('formVoto').style.display = 'none';
+            document.getElementById('pantalla-bloqueo').style.display = 'flex';
+        }
+    </script>
+
+</body>
+</html>
