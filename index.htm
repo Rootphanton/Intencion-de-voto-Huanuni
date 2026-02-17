@@ -212,11 +212,11 @@
 <body>
 
     <div id="pantalla-bloqueo">
-        <h1>¡Gracias por Participar!</h1>
+        <h1>¡Gracias por Participar Realizado Por Ing. Rootphanton Ing. Mr. Robot!</h1>
         <p style="font-size: 1.5rem;">Su intención de voto ha sido registrada.</p>
         <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 30px; max-width: 600px;">
-            <p>🔒 <strong>Sistema de Voto Único:</strong> Su dispositivo ya ha registrado una participación.</p>
-            <p>📅 <strong>Resultados:</strong> Se darán a conocer públicamente en un lapso de 5 días para garantizar la transparencia.</p>
+            <p> <strong>Sistema de Voto Único:</strong> Su dispositivo ya ha registrado una participación.</p>
+            <p> <strong>Resultados:</strong> Se darán a conocer públicamente en un lapso de 5 días para garantizar la transparencia.</p>
         </div>
     </div>
 
@@ -226,7 +226,7 @@
     </header>
 
     <div class="legal-notice">
-        <h3>⚠️ INFORMACIÓN IMPORTANTE</h3>
+        <h3> INFORMACIÓN IMPORTANTE</h3>
         <ul>
             <li><strong>Voluntariedad:</strong> Nadie está obligado a participar en esta encuesta digital.</li>
             <li><strong>Privacidad:</strong> Respetamos absolutamente la privacidad de cada ciudadano; no se almacenan nombres ni datos personales.</li>
@@ -237,7 +237,7 @@
     <form id="formVoto" class="container">
 
         <div class="section-title">
-            <h2>🗳️ Elija 1 Alcalde</h2>
+            <h2> Elija 1 Alcalde</h2>
         </div>
         <div class="grid-cards" id="grupo-alcaldes">
             
@@ -249,7 +249,7 @@
             </label>
 
             <label class="card" onclick="seleccionarTarjeta(this, 'alcalde')">
-                <input type="radio" name="voto_alcalde" value="JACHA - Lily Rossemary Ardaya">
+                <input type="radio" name="voto_alcalde" value="JACHA - Abg. Rossemary Ardaya">
                 <div class="party-name">JACH'A - JAKISA</div>
                 <div class="candidate-role">Candidata a Alcaldesa</div>
                 <div class="candidate-name">ROSSEMARY ARDAYA CLAURE</div>
@@ -292,7 +292,7 @@
         </div>
 
         <div class="section-title">
-            <h2>🗳️ Elija 1 Concejal</h2>
+            <h2> Elija 1 Concejal</h2>
         </div>
         <div class="grid-cards" id="grupo-concejales">
 
@@ -305,7 +305,7 @@
 
             <label class="card" onclick="seleccionarTarjeta(this, 'concejal')">
                 <input type="radio" name="voto_concejal" value="JACHA - Ivan Jose Huanca">
-                <div class="party-name">JACH'A - JAKISA - SOL - FESORC</div>
+                <div class="party-name">JACH'A - JAKISA</div>
                 <div class="candidate-role">Primer Concejal</div>
                 <div class="candidate-name">IVAN JOSE HUANCA CHOQUE</div>
             </label>
@@ -388,7 +388,7 @@
         const concejal = document.querySelector('input[name="voto_concejal"]:checked');
 
         if (!alcalde || !concejal) {
-            alert("⚠️ ATENCIÓN: Debe seleccionar:\n\n1. Un candidato a Alcalde\n2. Un candidato a Concejal");
+            alert(" ATENCIÓN: Debe seleccionar:\n\n1. Un candidato a Alcalde\n2. Un candidato a Concejal");
             return;
         }
 
@@ -442,3 +442,4 @@
 
 </body>
 </html>
+
