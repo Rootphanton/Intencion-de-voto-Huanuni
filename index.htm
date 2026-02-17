@@ -393,7 +393,6 @@
 
             fetch(scriptURL, {
                 method: "POST",
-                mode: "no-cors", // ESTO ES CRUCIAL PARA EVITAR EL ERROR DE CONEXIÓN
                 body: formData
             })
             .then(() => {
@@ -419,6 +418,7 @@
 
 </body>
 </html>
+
 
 
 
